@@ -42,6 +42,9 @@ MS.Tile = function (x, y) {
 
     this.texture = 'tile-basic';
 
+    this.status = '';
+    this.selectable = true;
+
     /**
      * Can the enemy walk on this tile?
      * @type {boolean}
@@ -51,3 +54,31 @@ MS.Tile = function (x, y) {
 };
 
 MS.Tile.prototype = Object.create(MS.Element.prototype);
+
+MS.Tile.prototype.init = function() {
+
+    MS.Element.prototype.init.call(this);
+
+    if (this.selectable == true) {
+        this.object.tint = 0xcccccc;
+        this.object.interactive = true;
+        this.object.on('mouseup', this.select, this);
+        this.object.on('touchend', this.select, this);
+    }
+
+};
+
+/**
+ * Select the current tile
+ */
+MS.Tile.prototype.select = function() {
+
+    if (this.selectable == false) {
+        return false;
+    }
+    MS.hideBuildMenu();
+    this.status = 'selected';
+    MS.showBuildMenu(this);
+    this.object.tint = 0xffffff;
+
+};

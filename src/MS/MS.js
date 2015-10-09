@@ -39,6 +39,19 @@ var MS = {
     timer: 0,
     loadingBar: {},
     grid: [], // Complete grid with [x][y] = {open: true|false, Element: {}};
+    gridSettings: {
+        sizeX: 15,
+        sizeY: 9,
+        size: 64,
+        start: {
+            x: 0,
+            y: 0
+        },
+        end: {
+            x: 14,
+            y: 8
+        }
+    },
     // List with key => object
     assets: [
         {
@@ -87,7 +100,7 @@ var MS = {
     _resizeGame: function () {
 
         var gameArea = document.getElementById('gameArea');
-        var widthToHeight = 16 / 9;
+        var widthToHeight = MS.settings.width / MS.settings.height;
         var newWidth = window.innerWidth;
         var newHeight = window.innerHeight;
         var newWidthToHeight = newWidth / newHeight;
@@ -96,13 +109,6 @@ var MS = {
             newWidth = newHeight * widthToHeight;
         } else {
             newHeight = newWidth / widthToHeight;
-        }
-
-        if (newWidth > 960) {
-            newWidth = 960;
-        }
-        if (newHeight > 640) {
-            newHeight = 640;
         }
 
         gameArea.style.width = newWidth + 'px';
@@ -120,11 +126,12 @@ var MS = {
      */
     startGame: function() {
 
-        var gridSizeX = 15;
-        var gridSizeY = 9;
-        var gridSize = 64;
-        var start = {x: 0, y: 0};
-        var end = {x: 14, y: 8};
+        var gridSizeX = this.gridSettings.sizeX;
+        var gridSizeY = this.gridSettings.sizeY;
+        var gridSize = this.gridSettings.size;
+        var halfGridSize = gridSize / 2;
+        var start = this.gridSettings.start;
+        var end = this.gridSettings.end;
 
         for (var x = 0; x < gridSizeX; x++) {
             this.grid[x] = [];
@@ -134,8 +141,8 @@ var MS = {
                 var open = true; // Default open
                 Tile.init();
                 Tile.object.position = {
-                    x: 32 + (x * gridSize),
-                    y: 32 + (y * gridSize)
+                    x: halfGridSize + (x * gridSize),
+                    y: halfGridSize + (y * gridSize)
                 };
                 Tile.add();
                 grid.open = Tile.open = open;
@@ -145,9 +152,9 @@ var MS = {
         }
 
         this.grid[start.x][start.y].Element.object.tint = 0x00ff00;
+        this.grid[start.x][start.y].Element.selectable = false;
         this.grid[end.x][end.y].Element.object.tint = 0xff0000;
-
-        console.log(this.grid);
+        this.grid[end.x][end.y].Element.selectable = false;
 
     },
 
@@ -182,6 +189,7 @@ var MS = {
         });
 
     },
+
     /**
      * Callback when an assets is loaded
      * @param loader
@@ -220,6 +228,29 @@ var MS = {
             b.z = b.Element.z || 0;
             return a.z - b.z
         });
+    },
+
+    /**
+     * Show buildmenu for the selected Tile
+     * @param Tile
+     */
+    showBuildMenu: function(Tile) {
+        console.log('Show menu', Tile);
+    },
+
+    /**
+     * Hide build menu and deselect all elements
+     */
+    hideBuildMenu: function() {
+        for (var x = 0; x < this.grid.length; x++) {
+            for (var y = 0; y < this.grid[x].length; y++) {
+                var Tile = this.grid[x][y].Element;
+                if (Tile.selectable == true) {
+                    Tile.object.tint = 0xcccccc;
+                    Tile.status = '';
+                }
+            }
+        }
     }
 
 };

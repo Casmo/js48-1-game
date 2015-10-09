@@ -40,6 +40,7 @@ var MS = {
     loadingBar: {},
     grid: [], // Complete grid with [x][y] = {open: true|false, Element: {}};
     graph: [], // Graph from grid used for a* calculations
+    selectedTile: null, // Current selected Tile
     gridSettings: {
         sizeX: 15,
         sizeY: 9,
@@ -53,6 +54,7 @@ var MS = {
             y: 8
         }
     },
+    menuObjects: [],
     // List with key => object
     assets: [
         {
@@ -60,8 +62,16 @@ var MS = {
             src: 'tiles/basic.png'
         },
         {
-            key: 'basic-creep',
-            src: 'creeps/basic-creep.png'
+            key: 'creep-basic',
+            src: 'creeps/basic.png'
+        },
+        {
+            key: 'creep-bunny',
+            src: 'creeps/bunny.png'
+        },
+        {
+            key: 'tower-basic',
+            src: 'towers/basic.png'
         }
     ],
 
@@ -193,7 +203,7 @@ var MS = {
 
         var startTile = this.grid[this.gridSettings.start.x][this.gridSettings.start.y].Element;
         var endTile = this.grid[this.gridSettings.end.x][this.gridSettings.end.y].Element;
-        var Creep = new MS.Creep();
+        var Creep = new MS.CreepBunny();
         Creep.init();
         Creep.object.position = {
             x: startTile.object.position.x,
@@ -283,7 +293,22 @@ var MS = {
      * @param Tile
      */
     showBuildMenu: function (Tile) {
-        console.log('Show menu', Tile);
+        this.selectedTile = Tile;
+        if (Tile.Tower == null) {
+            // Can only build a basic tower (table)
+            var Table = new MS.Tower();
+            Table.selectable = true;
+            Table.init();
+            Table.object.position = {
+                x: (this.gridSettings.size / 2),
+                y: (this.gridSettings.size / 2) + this.gridSettings.sizeY * this.gridSettings.size
+            };
+            Table.add();
+            this.menuObjects.push(Table);
+        }
+        else {
+            // Show upgrades
+        }
     },
 
     /**
@@ -299,6 +324,11 @@ var MS = {
                 }
             }
         }
+        for (var i = 0; i < this.menuObjects.length; i++) {
+            this.menuObjects[i].remove();
+        }
+        this.menuObjects = [];
+        this.selectedTile = null;
     }
 
 };

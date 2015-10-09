@@ -18,6 +18,8 @@ module.exports = function(grunt) {
                     'src/MS/MS.Element.js',
                     'src/MS/Tiles/MS.Tile.js',
                     'src/MS/Creeps/MS.Creep.js',
+                    'src/MS/Creeps/MS.CreepBunny.js',
+                    'src/MS/Towers/MS.Tower.js',
                     'src/game.js'
                 ],
                 dest: 'build/game.js'

@@ -32,7 +32,7 @@ MS.Creep = function () {
 
     this.name = 'creep';
 
-    this.texture = 'basic-creep';
+    this.texture = 'creep-basic';
 
     this.speed = 1000; // How many MS per tile
 

@@ -22,56 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 /**
- * Each tile is part of a grid.
+ * Basic Element of each creep in the game
  * @constructor
  */
-MS.Tile = function (x, y) {
+MS.CreepBunny = function () {
 
-    MS.Element.call(this);
+    MS.Creep.call(this);
 
-    /**
-     * The position on the grid
-     * @type {*|number}
-     */
-    this.x = x || 0;
-    this.y = y || 0;
+    this.texture = 'creep-bunny';
 
-    this.name = 'tile';
+    this.speed = 250; // How many MS per tile
 
-    this.texture = 'tile-basic';
-
-    this.status = '';
-    this.selectable = true;
-
-    /**
-     * Tower "Table" object.
-     * @type {{}}
-     */
-    this.Tower = null;
-
-    /**
-     * Can the enemy walk on this tile?
-     * @type {boolean}
-     */
-    this.open = true;
+    this.hp = 1;
 
 };
 
-MS.Tile.prototype = Object.create(MS.Element.prototype);
-
-/**
- * Select the current tile
- */
-MS.Tile.prototype.select = function() {
-
-    if (!MS.Element.prototype.select(this)) {
-        return false;
-    }
-    MS.hideBuildMenu();
-    this.status = 'selected';
-    MS.showBuildMenu(this);
-    this.object.tint = 0xffffff;
-
-};
+MS.CreepBunny.prototype = Object.create(MS.Creep.prototype);

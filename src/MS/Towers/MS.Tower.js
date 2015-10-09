@@ -27,51 +27,44 @@
  * Each tile is part of a grid.
  * @constructor
  */
-MS.Tile = function (x, y) {
+MS.Tower = function () {
 
     MS.Element.call(this);
 
-    /**
-     * The position on the grid
-     * @type {*|number}
-     */
-    this.x = x || 0;
-    this.y = y || 0;
+    this.name = 'tower'; // Actually a table, but hey? Who cares and read this anyways...
 
-    this.name = 'tile';
-
-    this.texture = 'tile-basic';
-
-    this.status = '';
-    this.selectable = true;
+    this.texture = 'tower-basic';
 
     /**
-     * Tower "Table" object.
-     * @type {{}}
+     * List with potions that fires at creeps
+     * @type {Array}
      */
-    this.Tower = null;
-
-    /**
-     * Can the enemy walk on this tile?
-     * @type {boolean}
-     */
-    this.open = true;
+    this.potions = [];
 
 };
 
-MS.Tile.prototype = Object.create(MS.Element.prototype);
+MS.Tower.prototype = Object.create(MS.Element.prototype);
 
 /**
- * Select the current tile
+ * Build tower on selected tile
  */
-MS.Tile.prototype.select = function() {
+MS.Tower.prototype.select = function() {
 
-    if (!MS.Element.prototype.select(this)) {
+    if (!MS.Element.prototype.select.call(this)) {
         return false;
     }
+
+    // @todo check money
+
+    var Table = new MS.Tower();
+    Table.init();
+    Table.object.position = {
+        x: MS.selectedTile.object.position.x,
+        y: MS.selectedTile.object.position.y
+    };
+    Table.add();
+    MS.selectedTile.Tower = Table;
     MS.hideBuildMenu();
-    this.status = 'selected';
-    MS.showBuildMenu(this);
-    this.object.tint = 0xffffff;
+    return true;
 
 };

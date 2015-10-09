@@ -55,6 +55,8 @@ MS.Element = function () {
      */
     this.animationSpeed = 1;
 
+    this.selectable = false;
+
 };
 
 MS.Element.prototype = {
@@ -102,6 +104,13 @@ MS.Element.prototype = {
             this.object.anchor.set(.5);
         }
 
+        if (this.selectable == true) {
+            this.object.tint = 0xcccccc;
+            this.object.interactive = true;
+            this.object.on('mousedown', this.select, this);
+            this.object.on('touchstart', this.select, this);
+        }
+
     },
 
     add: function () {
@@ -111,6 +120,17 @@ MS.Element.prototype = {
         }
         MS._objects.push(this);
         MS._updateLayers();
+    },
+
+    /**
+     * Callback after object is clicked / pressed
+     * @return boolean
+     */
+    select: function() {
+        if (this.selectable == false) {
+            return false;
+        }
+        return true;
     },
 
     remove: function () {

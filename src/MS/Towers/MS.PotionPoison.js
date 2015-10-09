@@ -31,11 +31,11 @@ MS.PotionPoison = function () {
 
     MS.Potion.call(this);
 
-    this.name = 'upgrade';
+    this.name = 'upgrade'; // Actually a table, but hey? Who cares and read this anyways...
 
     this.texture = 'potion-poison';
 
-    this.speed = 5; // Speed of bullets
+    this.speed = 100; // Speed of bullets
 
     this.price = 15;
 

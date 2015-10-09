@@ -44,8 +44,6 @@ MS.Tower = function () {
 
     this.price = 1;
 
-    this.Tile = null;
-
 };
 
 MS.Tower.prototype = Object.create(MS.Element.prototype);
@@ -72,7 +70,6 @@ MS.Tower.prototype.select = function() {
         y: MS.selectedTile.object.position.y
     };
     Table.add();
-    Table.Tile = MS.selectedTile;
     MS.selectedTile.Tower = Table;
 
     // Close grid
@@ -81,34 +78,5 @@ MS.Tower.prototype.select = function() {
 
     MS.hideBuildMenu();
     return true;
-
-};
-
-MS.Tower.prototype.update = function(time) {
-
-    if (!MS.Element.prototype.update.call(this, time)) {
-        return false;
-    }
-
-    // Loop through potions and let them shoot
-    for (var i = 0; i < this.potions.length; i++) {
-        var potion = this.potions[i];
-        if (MS.timer < potion.nextShot) {
-            return false; // Just shot recently
-        }
-        potion.nextShot = MS.timer + potion.speed;
-        var enemy = MS.findEnemyInRange(this.object.position, potion.range);
-        if (enemy != false) {
-            var bullet = new MS.Bullet();
-            bullet.init();
-            bullet.target = enemy;
-            bullet.object.position = {
-                x: this.Tile.object.position.x,
-                y: this.Tile.object.position.y
-            };
-            bullet.add();
-            bullet.fire();
-        }
-    }
 
 };

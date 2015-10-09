@@ -92,9 +92,3 @@ MS.Creep.prototype.update = function(time) {
     }
 
 };
-
-MS.Creep.prototype.hit = function (damage) {
-
-    console.log('creep hit with ' + damage + ' damage');
-
-};

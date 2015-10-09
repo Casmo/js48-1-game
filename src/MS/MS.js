@@ -357,30 +357,6 @@ var MS = {
         }
         this.menuObjects = [];
         this.selectedTile = null;
-    },
-
-    /**
-     * Find an (the first) enemy in range
-     * @param pos
-     * @param range
-     */
-    findEnemyInRange: function (pos, range) {
-
-        for (var i = 0; i < this._objects.length; i++) {
-            var object = this._objects[i];
-            if (object.name != 'creep') {
-                continue;
-            }
-            var targetPos = object.object.position;
-
-            var dx = Math.abs(pos.x - targetPos.x);
-            var dy = Math.abs(pos.y - targetPos.y);
-            if (dx < range && dy < range) {
-                return object;
-            }
-        }
-        return false;
-
     }
 
 };

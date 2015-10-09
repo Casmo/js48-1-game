@@ -32,6 +32,8 @@ MS.CreepBunny = function () {
 
     this.texture = 'creep-bunny';
 
+    this.speed = 250; // How many MS per tile
+
     this.hp = 1;
 
 };

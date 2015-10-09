@@ -31,19 +31,15 @@ MS.Potion = function () {
 
     MS.Element.call(this);
 
-    this.name = 'upgrade';
+    this.name = 'upgrade'; // Actually a table, but hey? Who cares and read this anyways...
 
     this.texture = 'potion-basic';
 
-    this.speed = 2; // Speed of bullets
-
-    this.nextShot = 0;
+    this.speed = 50; // Speed of bullets
 
     this.price = 10;
 
-    this.damage = 1;
 
-    this.range = 128;
 
 };
 
@@ -79,16 +75,5 @@ MS.Potion.prototype.select = function() {
 
     MS.hideBuildMenu();
     return true;
-
-};
-
-/**
- * Update takes place in the tower/table object. This is for the menu...
- * @param time
- * @returns {boolean}
- */
-MS.Potion.prototype.update = function(time) {
-
-    return false;
 
 };

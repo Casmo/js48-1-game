@@ -22,79 +22,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/**
- * Basic Element of each creep in the game
- * @constructor
- */
-MS.Creep = function () {
+MS.Bullet = function () {
 
     MS.Element.call(this);
 
-    this.name = 'creep';
+    this.name = 'bullet';
 
-    this.texture = 'creep-basic';
+    this.texture = 'tower-basic';
 
-    this.speed = 1000; // How many MS per tile
+    this.damage = 1;
 
-    this.hp = 1;
+    this.target = null; // The enemy to shoot at
 
-    this.currentTile = {};
-    this.endTile = {};
-    this.nextTile = {x:0,y:0};
-    this.path = [];
     this.tween = {};
 
 };
 
-MS.Creep.prototype = Object.create(MS.Element.prototype);
+MS.Bullet.prototype = Object.create(MS.Element.prototype);
 
-/**
- * (re) Calculate the path to crawl through the maze based on A*
- */
-MS.Creep.prototype.calculatePath = function() {
+MS.Bullet.prototype.init = function() {
 
-    if (this.currentTile == null || this.endTile == null) {
-        return false;
-    }
+    MS.Element.prototype.init.call(this);
 
-    var start = MS.graph.grid[this.currentTile.x][this.currentTile.y];
-    var end = MS.graph.grid[this.endTile.x][this.endTile.y];
-    this.path = astar.search(MS.graph, start, end);
-    if (this.path.length <= 0) {
-        return false;
+    this.object = new PIXI.Graphics();
+    this.object.beginFill(0xffffff);
+    this.object.drawCircle(0,0,5);
+
+};
+
+MS.Bullet.prototype.fire = function(target) {
+
+    if (target != null) {
+        this.target = target;
     }
 
     this.tween = new TWEEN.Tween(this.object.position);
     var to = {x:[],y:[]};
-    for (var i = 0; i < this.path.length; i++) {
-        var Tile = MS.grid[this.path[i].x][this.path[i].y].Element;
-        to.x.push(Tile.object.position.x);
-        to.y.push(Tile.object.position.y);
-    }
-    var duration = this.speed * this.path.length;
+    to.x.push(this.target.object.position.x);
+    to.y.push(this.target.object.position.y);
+    var duration = 500;
     this.tween.to(to, duration);
     this.tween.onUpdate(function(p, tween) {
+        //console.log(tween);
+        // @todo update the tween.last to values based on tween.Element.target;
         tween.Element.object.position.x = this.x;
         tween.Element.object.position.y = this.y;
     });
     this.tween.onComplete(function (tween) {
+        if (tween.Element.target != null) {
+            tween.Element.target.hit(tween.Element.damage);
+        }
         tween.Element.tween = null; // Is already gone in TWEEN
         tween.Element.remove();
     });
     this.tween.Element = this;
     this.tween.start();
-};
-
-MS.Creep.prototype.update = function(time) {
-
-    if (!MS.Element.prototype.update.call(this. time) || this.nextTile == null) {
-        return false;
-    }
-
-};
-
-MS.Creep.prototype.hit = function (damage) {
-
-    console.log('creep hit with ' + damage + ' damage');
 
 };

@@ -44,7 +44,7 @@ MS.Element = function () {
 
     /**
      * The texture or textures of the element
-     * @type {null}
+     * @type {null}|object|array
      */
     this.texture = null;
 
@@ -78,10 +78,15 @@ MS.Element.prototype = {
      */
     init: function() {
 
-        if (this.texture != null && this.texture.length > 0) {
+        // YAK! Dammit JS.
+        // http://stackoverflow.com/a/4775737/4071949
+        if (this.texture != null && Object.prototype.toString.call( this.texture ) === '[object Array]') {
             var frames = [];
             for (var i = 0; i < this.texture.length; i++) {
-                frames.push(this.texture[i]);
+                if (typeof MS._resources[this.texture[i]] == 'undefined') {
+                    continue; // Texture not found
+                }
+                frames.push(MS._resources[this.texture[i]].texture);
             }
 
             this.object = new PIXI.extras.MovieClip(frames);
@@ -91,7 +96,9 @@ MS.Element.prototype = {
         }
         else if (this.texture != null) {
             this.object = new PIXI.Sprite();
-            this.object.texture = this.texture;
+            if (typeof MS._resources[this.texture] != 'undefined') {
+                this.object.texture = MS._resources[this.texture].texture;
+            }
             this.object.anchor.set(.5);
         }
 

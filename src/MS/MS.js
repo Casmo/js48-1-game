@@ -25,8 +25,8 @@
 var MS = {
     settings: {
         // Resolution
-        width: 1920,
-        height: 1080,
+        width: 960,
+        height: 640,
         sound: 10, // 0-10 where 0 is off
         music: 10, // 01-10 where 0 is off
         assetsPath: 'assets/',
@@ -38,6 +38,14 @@ var MS = {
     _resources: {}, // List with key => asset
     timer: 0,
     loadingBar: {},
+    grid: [], // Complete grid with [x][y] = {open: true|false, Element: {}};
+    // List with key => object
+    assets: [
+        {
+            key: 'tile-basic',
+            src: 'tiles/basic.png'
+        }
+    ],
 
     init: function () {
 
@@ -68,13 +76,13 @@ var MS = {
         loadingBar.object.position = {x: 0, y: 0};
         loadingBar.add();
         this.loadingBar = loadingBar;
+        this.load(this.assets, function() { MS.startGame(); });
         this._resizeGame();
     },
 
     /**
      * Resize the game depending on the resolution
      * @private
-     * @todo make a min width and height
      */
     _resizeGame: function () {
 
@@ -86,16 +94,60 @@ var MS = {
 
         if (newWidthToHeight > widthToHeight) {
             newWidth = newHeight * widthToHeight;
-            gameArea.style.height = newHeight + 'px';
-            gameArea.style.width = newWidth + 'px';
         } else {
             newHeight = newWidth / widthToHeight;
-            gameArea.style.width = newWidth + 'px';
-            gameArea.style.height = newHeight + 'px';
         }
+
+        if (newWidth > 960) {
+            newWidth = 960;
+        }
+        if (newHeight > 640) {
+            newHeight = 640;
+        }
+
+        gameArea.style.width = newWidth + 'px';
+        gameArea.style.height = newHeight + 'px';
 
         gameArea.style.marginTop = -(newHeight / 2) + 'px';
         gameArea.style.marginLeft = -(newWidth / 2) + 'px';
+
+    },
+
+    /**
+     * Temporary function to start the first level
+     * @todo should be using tiled for generating levels
+     * @private
+     */
+    startGame: function() {
+
+        var gridSizeX = 15;
+        var gridSizeY = 9;
+        var gridSize = 64;
+        var start = {x: 0, y: 0};
+        var end = {x: 14, y: 8};
+
+        for (var x = 0; x < gridSizeX; x++) {
+            this.grid[x] = [];
+            for (var y = 0; y < gridSizeY; y++) {
+                var grid = {};
+                var Tile = new MS.Tile(x, y);
+                var open = true; // Default open
+                Tile.init();
+                Tile.object.position = {
+                    x: 32 + (x * gridSize),
+                    y: 32 + (y * gridSize)
+                };
+                Tile.add();
+                grid.open = Tile.open = open;
+                grid.Element = Tile;
+                this.grid[x][y] = grid;
+            }
+        }
+
+        this.grid[start.x][start.y].Element.object.tint = 0x00ff00;
+        this.grid[end.x][end.y].Element.object.tint = 0xff0000;
+
+        console.log(this.grid);
 
     },
 

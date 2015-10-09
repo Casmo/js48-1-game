@@ -14,6 +14,7 @@ module.exports = function(grunt) {
                     'src/utils/randomcolor.js',
                     'src/MS/MS.js',
                     'src/MS/MS.Element.js',
+                    'src/MS/Tile/MS.Tile.js',
                     'src/game.js'
                 ],
                 dest: 'build/game.js'

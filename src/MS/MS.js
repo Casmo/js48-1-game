@@ -39,6 +39,7 @@ var MS = {
     timer: 0,
     loadingBar: {},
     grid: [], // Complete grid with [x][y] = {open: true|false, Element: {}};
+    graph: [], // Graph from grid used for a* calculations
     gridSettings: {
         sizeX: 15,
         sizeY: 9,
@@ -57,6 +58,10 @@ var MS = {
         {
             key: 'tile-basic',
             src: 'tiles/basic.png'
+        },
+        {
+            key: 'basic-creep',
+            src: 'creeps/basic-creep.png'
         }
     ],
 
@@ -89,7 +94,9 @@ var MS = {
         loadingBar.object.position = {x: 0, y: 0};
         loadingBar.add();
         this.loadingBar = loadingBar;
-        this.load(this.assets, function() { MS.startGame(); });
+        this.load(this.assets, function () {
+            MS.startGame();
+        });
         this._resizeGame();
     },
 
@@ -124,7 +131,7 @@ var MS = {
      * @todo should be using tiled for generating levels
      * @private
      */
-    startGame: function() {
+    startGame: function () {
 
         var gridSizeX = this.gridSettings.sizeX;
         var gridSizeY = this.gridSettings.sizeY;
@@ -135,6 +142,7 @@ var MS = {
 
         for (var x = 0; x < gridSizeX; x++) {
             this.grid[x] = [];
+            this.graph[x] = [];
             for (var y = 0; y < gridSizeY; y++) {
                 var grid = {};
                 var Tile = new MS.Tile(x, y);
@@ -145,7 +153,7 @@ var MS = {
                     y: halfGridSize + (y * gridSize)
                 };
                 Tile.add();
-                grid.open = Tile.open = open;
+                grid.open = Tile.open = this.graph[x][y] = open;
                 grid.Element = Tile;
                 this.grid[x][y] = grid;
             }
@@ -156,6 +164,45 @@ var MS = {
         this.grid[end.x][end.y].Element.object.tint = 0xff0000;
         this.grid[end.x][end.y].Element.selectable = false;
 
+        this.setGraph();
+
+    },
+
+    /**
+     * Set graph after building a new tower. See A* documentation
+     * @link https://github.com/bgrins/javascript-astar
+     */
+    setGraph: function() {
+
+        var graph = [];
+        for (var x = 0; x < this.gridSettings.sizeX; x++) {
+            graph[x] = [];
+            for (var y = 0; y < this.gridSettings.sizeY; y++) {
+                graph[x][y] = this.grid[x][y].open;
+            }
+        }
+
+        this.graph = new Graph(graph);
+
+    },
+
+    /**
+     * Temporary function to spawn creeps
+     */
+    spawnCreep: function () {
+
+        var startTile = this.grid[this.gridSettings.start.x][this.gridSettings.start.y].Element;
+        var endTile = this.grid[this.gridSettings.end.x][this.gridSettings.end.y].Element;
+        var Creep = new MS.Creep();
+        Creep.init();
+        Creep.object.position = {
+            x: startTile.object.position.x,
+            y: startTile.object.position.y
+        };
+        Creep.currentTile = startTile;
+        Creep.endTile = endTile;
+        Creep.add();
+        Creep.calculatePath();
     },
 
     /**
@@ -211,6 +258,7 @@ var MS = {
             this._objects[i].update(time);
         }
         this._renderer.render(this._stage);
+        TWEEN.update(time);
     },
 
     /**
@@ -234,14 +282,14 @@ var MS = {
      * Show buildmenu for the selected Tile
      * @param Tile
      */
-    showBuildMenu: function(Tile) {
+    showBuildMenu: function (Tile) {
         console.log('Show menu', Tile);
     },
 
     /**
      * Hide build menu and deselect all elements
      */
-    hideBuildMenu: function() {
+    hideBuildMenu: function () {
         for (var x = 0; x < this.grid.length; x++) {
             for (var y = 0; y < this.grid[x].length; y++) {
                 var Tile = this.grid[x][y].Element;

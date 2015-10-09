@@ -32,9 +32,17 @@ MS.Creep = function () {
 
     this.name = 'creep';
 
-    this.texture = '';
+    this.texture = 'basic-creep';
 
-    this.speed = 1;
+    this.speed = 1000; // How many MS per tile
+
+    this.hp = 1;
+
+    this.currentTile = {};
+    this.endTile = {};
+    this.nextTile = {x:0,y:0};
+    this.path = [];
+    this.tween = {};
 
 };
 
@@ -44,5 +52,43 @@ MS.Creep.prototype = Object.create(MS.Element.prototype);
  * (re) Calculate the path to crawl through the maze based on A*
  */
 MS.Creep.prototype.calculatePath = function() {
+
+    if (this.currentTile == null || this.endTile == null) {
+        return false;
+    }
+
+    var start = MS.graph.grid[this.currentTile.x][this.currentTile.y];
+    var end = MS.graph.grid[this.endTile.x][this.endTile.y];
+    this.path = astar.search(MS.graph, start, end);
+    if (this.path.length <= 0) {
+        return false;
+    }
+
+    this.tween = new TWEEN.Tween(this.object.position);
+    var to = {x:[],y:[]};
+    for (var i = 0; i < this.path.length; i++) {
+        var Tile = MS.grid[this.path[i].x][this.path[i].y].Element;
+        to.x.push(Tile.object.position.x);
+        to.y.push(Tile.object.position.y);
+    }
+    var duration = this.speed * this.path.length;
+    this.tween.to(to, duration);
+    this.tween.onUpdate(function(p, tween) {
+        tween.Element.object.position.x = this.x;
+        tween.Element.object.position.y = this.y;
+    });
+    this.tween.onComplete(function (tween) {
+        tween.Element.tween = null; // Is already gone in TWEEN
+        tween.Element.remove();
+    });
+    this.tween.Element = this;
+    this.tween.start();
+};
+
+MS.Creep.prototype.update = function(time) {
+
+    if (!MS.Element.prototype.update.call(this. time) || this.nextTile == null) {
+        return false;
+    }
 
 };

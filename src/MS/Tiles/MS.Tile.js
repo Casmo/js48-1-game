@@ -62,8 +62,8 @@ MS.Tile.prototype.init = function() {
     if (this.selectable == true) {
         this.object.tint = 0xcccccc;
         this.object.interactive = true;
-        this.object.on('mouseup', this.select, this);
-        this.object.on('touchend', this.select, this);
+        this.object.on('mousedown', this.select, this);
+        this.object.on('touchstart', this.select, this);
     }
 
 };

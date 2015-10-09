@@ -11,7 +11,9 @@ module.exports = function(grunt) {
                 src: [
                     'src/utils/howler.js', // Load howler before Pixi for loading audio files
                     'src/utils/pixi.js',
+                    'src/utils/tween.js',
                     'src/utils/randomcolor.js',
+                    'src/utils/astar.js',
                     'src/MS/MS.js',
                     'src/MS/MS.Element.js',
                     'src/MS/Tiles/MS.Tile.js',

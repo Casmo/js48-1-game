@@ -55,7 +55,11 @@ MS.Tower.prototype.select = function() {
     }
 
     // @todo check money
+    // @todo check if we do not close the a* path...
 
+    // if above checks are true then...
+
+    // Build table
     var Table = new MS.Tower();
     Table.init();
     Table.object.position = {
@@ -64,6 +68,12 @@ MS.Tower.prototype.select = function() {
     };
     Table.add();
     MS.selectedTile.Tower = Table;
+
+    // Close grid
+    console.log(MS.grid[MS.selectedTile.x][MS.selectedTile.y]);
+    MS.grid[MS.selectedTile.x][MS.selectedTile.y].open = 0;
+    MS.setGraph();
+
     MS.hideBuildMenu();
     return true;
 

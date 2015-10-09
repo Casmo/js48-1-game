@@ -55,7 +55,7 @@ MS.Tile = function (x, y) {
      * Can the enemy walk on this tile?
      * @type {boolean}
      */
-    this.open = true;
+    this.open = 1; // 1|0
 
 };
 
@@ -66,7 +66,7 @@ MS.Tile.prototype = Object.create(MS.Element.prototype);
  */
 MS.Tile.prototype.select = function() {
 
-    if (!MS.Element.prototype.select(this)) {
+    if (!MS.Element.prototype.select.call(this)) {
         return false;
     }
     MS.hideBuildMenu();

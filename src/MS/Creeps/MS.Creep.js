@@ -36,7 +36,7 @@ MS.Creep = function () {
 
     this.speed = 1000; // How many MS per tile
 
-    this.hp = 1;
+    this.hp = 10;
 
     this.currentTile = {};
     this.endTile = {};
@@ -95,6 +95,10 @@ MS.Creep.prototype.update = function(time) {
 
 MS.Creep.prototype.hit = function (damage) {
 
-    console.log('creep hit with ' + damage + ' damage');
+    this.hp -= damage;
+    if (this.hp < 0) {
+        // @todo effect here
+        this.remove();
+    }
 
 };

@@ -60,20 +60,22 @@ MS.Bullet.prototype.fire = function(target) {
     var to = {x:[],y:[]};
     to.x.push(this.target.object.position.x);
     to.y.push(this.target.object.position.y);
-    var duration = 500;
+    var duration = 250;
     this.tween.to(to, duration);
     this.tween.onUpdate(function(p, tween) {
         //console.log(tween);
         // @todo update the tween.last to values based on tween.Element.target;
+        if (tween.Element.target != null) {
+        }
         tween.Element.object.position.x = this.x;
         tween.Element.object.position.y = this.y;
     });
     this.tween.onComplete(function (tween) {
+        tween.Element.tween = null; // Is already gone in TWEEN
+        tween.Element.remove();
         if (tween.Element.target != null) {
             tween.Element.target.hit(tween.Element.damage);
         }
-        tween.Element.tween = null; // Is already gone in TWEEN
-        tween.Element.remove();
     });
     this.tween.Element = this;
     this.tween.start();

@@ -138,7 +138,9 @@ MS.Element.prototype = {
             MS._stage.removeChild(this.object);
         }
         var indexOf = MS._objects.indexOf(this);
-        MS._objects.splice(indexOf, 1);
+        if (indexOf >= 0) {
+            MS._objects.splice(indexOf, 1);
+        }
     },
 
     resize: function() {

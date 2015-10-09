@@ -72,6 +72,14 @@ var MS = {
         {
             key: 'tower-basic',
             src: 'towers/basic.png'
+        },
+        {
+            key: 'potion-basic',
+            src: 'towers/upgrade-potion-basic.png'
+        },
+        {
+            key: 'potion-poison',
+            src: 'towers/upgrade-potion-poison.png'
         }
     ],
 
@@ -294,20 +302,40 @@ var MS = {
      */
     showBuildMenu: function (Tile) {
         this.selectedTile = Tile;
+        var upgrades = [];
         if (Tile.Tower == null) {
             // Can only build a basic tower (table)
             var Table = new MS.Tower();
             Table.selectable = true;
-            Table.init();
-            Table.object.position = {
-                x: (this.gridSettings.size / 2),
-                y: (this.gridSettings.size / 2) + this.gridSettings.sizeY * this.gridSettings.size
-            };
-            Table.add();
-            this.menuObjects.push(Table);
+            upgrades.push(Table);
         }
         else {
             // Show upgrades
+            if (Tile.Tower.potions.length >= Tile.Tower.potionSpots) {
+                return false; // Can't upgrade anymore...
+                // @todo show destroy button?
+            }
+            var Potion = new MS.Potion();
+            Potion.selectable = true;
+            upgrades.push(Potion);
+            var Potion = new MS.PotionPoison();
+            Potion.selectable = true;
+            upgrades.push(Potion);
+            // @todo more here...
+        }
+
+        var x = (this.gridSettings.size / 2);
+        var y = (this.gridSettings.size / 2) + this.gridSettings.sizeY * this.gridSettings.size;
+        for (var i = 0; i < upgrades.length; i++) {
+            var upgrade = upgrades[i];
+            upgrade.init();
+            upgrade.object.position = {
+                x: x,
+                y: y
+            };
+            upgrade.add();
+            this.menuObjects.push(upgrade);
+            x += this.gridSettings.size;
         }
     },
 

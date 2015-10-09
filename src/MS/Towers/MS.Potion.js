@@ -27,31 +27,28 @@
  * Each tile is part of a grid.
  * @constructor
  */
-MS.Tower = function () {
+MS.Potion = function () {
 
     MS.Element.call(this);
 
-    this.name = 'tower'; // Actually a table, but hey? Who cares and read this anyways...
+    this.name = 'upgrade'; // Actually a table, but hey? Who cares and read this anyways...
 
-    this.texture = 'tower-basic';
+    this.texture = 'potion-basic';
 
-    this.potionSpots = 2; // How many potions can you place on this table?
-    /**
-     * List with potions that fires at creeps
-     * @type {Array}
-     */
-    this.potions = [];
+    this.speed = 50; // Speed of bullets
 
-    this.price = 1;
+    this.price = 10;
+
+
 
 };
 
-MS.Tower.prototype = Object.create(MS.Element.prototype);
+MS.Potion.prototype = Object.create(MS.Element.prototype);
 
 /**
  * Build tower on selected tile
  */
-MS.Tower.prototype.select = function() {
+MS.Potion.prototype.select = function() {
 
     if (!MS.Element.prototype.select.call(this)) {
         return false;
@@ -62,19 +59,19 @@ MS.Tower.prototype.select = function() {
 
     // if above checks are true then...
 
-    // Build table
-    var Table = new MS.Tower();
-    Table.init();
-    Table.object.position = {
-        x: MS.selectedTile.object.position.x,
-        y: MS.selectedTile.object.position.y
+    // Build potion and add to the table
+    var Potion = this;
+    MS.Element.call(Potion);
+    Potion.init();
+    Potion.object.position = {
+        x: -18,
+        y: -(this.object.height / 2)
     };
-    Table.add();
-    MS.selectedTile.Tower = Table;
-
-    // Close grid
-    MS.grid[MS.selectedTile.x][MS.selectedTile.y].open = 0;
-    MS.setGraph();
+    if (MS.selectedTile.Tower.potions.length >= 1) {
+        Potion.object.position.x = 18;
+    }
+    MS.selectedTile.Tower.object.addChild(Potion.object);
+    MS.selectedTile.Tower.potions.push(this);
 
     MS.hideBuildMenu();
     return true;

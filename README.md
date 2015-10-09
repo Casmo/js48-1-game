@@ -12,5 +12,6 @@ then
 Open `build/index.html` in your browser.
 
 ### License & Thanks
-[Couchfriends.com](http://www.couchfriends.com)
-[Kenney.nl](http://www.kenney.nl)
+* [Couchfriends.com](http://www.couchfriends.com)
+* [Kenney.nl](http://www.kenney.nl)
+* Unlucky Studio

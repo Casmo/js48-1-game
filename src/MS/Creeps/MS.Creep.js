@@ -134,3 +134,13 @@ MS.Creep.prototype.hit = function (damage) {
     return false;
 
 };
+MS.Creep.prototype.add = function () {
+
+    if (this.object != null) {
+        this.object.Element = this;
+        MS._stage.addChild(this.object);
+    }
+    MS._objects.push(this);
+    MS._updateLayers();
+
+};

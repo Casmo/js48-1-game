@@ -70,7 +70,7 @@ MS.Bullet.prototype.fire = function(target) {
         if (tween.Element.target != null) {
             tween.Element.target.hit(tween.Element.damage);
         }
-        var index = Math.floor(Math.random() * 4) + 1;
+        var index = Math.floor(Math.random() * 3) + 1;
         MS._resources['impact-00' + index].data.play();
         tween.Element.remove();
     });

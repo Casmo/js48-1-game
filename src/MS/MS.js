@@ -46,7 +46,8 @@ var MS = {
     score: 0,
     lives: 10,
     money: 100,
-    pause: false,
+    pause: true,
+    started: false,
     waveSettings: {
         currentWave: 1,
         waveCreeps: 10,
@@ -148,7 +149,7 @@ var MS = {
         },
         {
             key: 'sound-hippo',
-            src: 'sounds/effects/hippo.wav'
+            src: 'sounds/effects/hippo.ogg'
         },
         {
             key: 'sound-monkey',
@@ -187,8 +188,8 @@ var MS = {
             src: 'sounds/effects/impact-003.wav'
         },
         {
-            key: 'impact-004',
-            src: 'sounds/effects/impact-004.wav'
+            key: 'sound-background',
+            src: 'sounds/Prop-Fluous.mp3'
         }
     ],
 
@@ -222,9 +223,29 @@ var MS = {
         loadingBar.add();
         this.loadingBar = loadingBar;
         this.load(this.assets, function () {
+            var splash = document.createElement('div');
+            splash.id = 'splash';
+            splash.innerHTML = '<h1>A <a href="https://twitter.com/hashtag/js48" target="_blank">#js48</a> entry (Tower Defense)</h1>';
+            splash.innerHTML += '<p>Dr. M. Adness from the science lab E. vil &amp; Co is experimenting new drugs for the party scene. Unfortunately the test animals are escaping.</p>';
+            splash.innerHTML += '<p>Kill them before the blow our top secret operation!</p>';
+            splash.innerHTML += '<h2>How to play</h2>';
+            splash.innerHTML += '<p>Click or tap on a tile to build a table. Each table can be upgraded with potions and flasks that will automatically attack creatures in range.</p>';
+            splash.innerHTML += '<h2>Credits & Information</h2>';
+            splash.innerHTML += '<p>The game is open source and for credits and more information visit <a href="https://github.com/Casmo/js48-1-game" target="_blank">https://github.com/Casmo/js48-1-game</a></p>';
+            splash.innerHTML += '<p><a class="play" onclick="MS.hideSplash();fullscreen();">PLAY!</a></p>';
+            splash.setAttribute('onclick', "MS.hideSplash();fullscreen();");
+            document.body.appendChild(splash);
+            MS._resources['sound-background'].data._volume = .5;
+            MS._resources['sound-background'].data._loop = true;
+            MS._resources['sound-background'].data.play();
             MS.startGame();
         });
         this._resizeGame();
+    },
+
+    hideSplash: function() {
+        document.getElementById('splash').style.display = 'none';
+        this.pause = false;
     },
 
     /**
@@ -426,6 +447,8 @@ var MS = {
         };
         nextSpawn.add();
 
+        this.started = true;
+
     },
 
     /**
@@ -532,7 +555,7 @@ var MS = {
             // Setup the creep info
             CreepInfo = this._waveOptions[index];
         }
-        Creep.hp = CreepInfo.baseHp + (wave * 2);
+        Creep.hp = CreepInfo.baseHp + Math.round(wave *.5);
         Creep.texture = CreepInfo.texture;
         Creep.speed = CreepInfo.speed;
         Creep.money = wave;
@@ -545,8 +568,8 @@ var MS = {
         };
         Creep.currentTile = startTile;
         Creep.endTile = endTile;
-        Creep.add();
         Creep.calculatePath();
+        Creep.add();
     },
 
     /**
@@ -598,6 +621,9 @@ var MS = {
 
     update: function (time) {
         this._renderer.render(this._stage);
+        if (this.started == false) {
+            return;
+        }
         if (this.pause == false) {
             this.timer++;
             for (var i = 0; i < this._objects.length; i++) {
@@ -672,6 +698,7 @@ var MS = {
             waveInterval: 250,
             nextSpawn: 1000
         };
+        this.started = false;
     },
 
     addMoney: function (money) {
@@ -689,6 +716,9 @@ var MS = {
     addLives: function (lives) {
 
         this.lives += lives;
+        if (this.lives < 0) {
+            this.startGame();
+        }
 
     },
 
@@ -747,7 +777,7 @@ var MS = {
             };
             upgrade.add();
             this.menuObjects.push(upgrade);
-            x += this.gridSettings.size;
+            x += this.gridSettings.size + 16; // 16 padding
         }
     },
 

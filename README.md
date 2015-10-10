@@ -20,3 +20,4 @@ Open `build/index.html` in your browser.
 * [Ogrebane](http://opengameart.org/users/ogrebane)
 * [legoluft](http://www.legoluft.de/)
 * [Independent.nu](http://www.johannespinter.com/inu/ljudbank.htm)
+* Prop

@@ -189,18 +189,23 @@ var MS = {
     /**
      * Set graph after building a new tower. See A* documentation
      * @link https://github.com/bgrins/javascript-astar
+     * @param returnGraph boolean wether to return the grid or set it as final
      */
-    setGraph: function() {
+    setGraph: function(returnGrid) {
 
-        var graph = [];
+        returnGrid = returnGrid || false;
+        var grid = [];
         for (var x = 0; x < this.gridSettings.sizeX; x++) {
-            graph[x] = [];
+            grid[x] = [];
             for (var y = 0; y < this.gridSettings.sizeY; y++) {
-                graph[x][y] = this.grid[x][y].open;
+                grid[x][y] = this.grid[x][y].open;
             }
         }
 
-        this.graph = new Graph(graph);
+        if (returnGrid) {
+            return grid;
+        }
+        this.graph = new Graph(grid);
 
     },
 

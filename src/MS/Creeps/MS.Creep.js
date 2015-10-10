@@ -42,7 +42,7 @@ MS.Creep = function () {
     this.endTile = {};
     this.nextTile = {x:0,y:0};
     this.path = [];
-    this.tween = {};
+    this.tween = null;
 
 };
 
@@ -64,6 +64,9 @@ MS.Creep.prototype.calculatePath = function() {
         return false;
     }
 
+    if (this.tween != null) {
+        TWEEN.remove(this.tween);
+    }
     this.tween = new TWEEN.Tween(this.object.position);
     var to = {x:[],y:[]};
     for (var i = 0; i < this.path.length; i++) {

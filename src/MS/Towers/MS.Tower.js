@@ -60,9 +60,17 @@ MS.Tower.prototype.select = function() {
     }
 
     // @todo check money
-    // @todo check if we do not close the a* path...
-
     // if above checks are true then...
+    var grid = MS.setGraph(true);
+    grid[MS.selectedTile.x][MS.selectedTile.y] = 0;
+    var graph = new Graph(grid);
+    var start = graph.grid[MS.gridSettings.start.x][MS.gridSettings.start.y];
+    var end = graph.grid[MS.gridSettings.end.x][MS.gridSettings.end.y];
+    var path = astar.search(graph, start, end);
+    if (path.length <= 0) {
+        MS.hideBuildMenu();
+        return false;
+    }
 
     // Build table
     var Table = new MS.Tower();

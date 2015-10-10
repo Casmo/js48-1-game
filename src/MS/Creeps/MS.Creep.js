@@ -52,6 +52,8 @@ MS.Creep = function () {
     this.path = [];
     this.tween = null;
 
+    this.isSlowed = false;
+
 };
 
 MS.Creep.prototype = Object.create(MS.Element.prototype);
@@ -67,38 +69,52 @@ MS.Creep.prototype.calculatePath = function() {
 
     var start = MS.graph.grid[this.currentTile.x][this.currentTile.y];
     var end = MS.graph.grid[this.endTile.x][this.endTile.y];
+    var path = [];
     if (this.fly == true && 1==2) {
         // @todo doesnt work, fuck
-        this.path = astar.search(MS.graphOpen, start, end);
+        path = astar.search(MS.graphOpen, start, end);
     }
     else {
-        this.path = astar.search(MS.graph, start, end);
+        path = astar.search(MS.graph, start, end);
     }
-    if (this.path.length <= 0) {
+    if (path.length <= 0) {
         return false;
     }
 
+    this.path = path;
     if (this.tween != null) {
-        TWEEN.remove(this.tween);
+        //this.tween.stop();
     }
     this.tween = new TWEEN.Tween(this.object.position);
-    var to = {x:[],y:[]};
+    var to = {x:[],y:[],tileX:[], tileY:[]};
     for (var i = 0; i < this.path.length; i++) {
         var Tile = MS.grid[this.path[i].x][this.path[i].y].Element;
         to.x.push(Tile.object.position.x);
         to.y.push(Tile.object.position.y);
+        to.tileX.push(this.path[i].x);
+        to.tileY.push(this.path[i].y);
     }
     var duration = this.speed * this.path.length;
     this.tween.to(to, duration);
     this.tween.onUpdate(function(p, tween) {
         tween.Element.object.position.x = this.x;
         tween.Element.object.position.y = this.y;
+        var x = Math.ceil(this.tileX);
+        var y = Math.ceil(this.tileY);
+        if (isNaN(x)) {
+            x = 0;
+        }
+        if (isNaN(y)) {
+            y = 0;
+        }
+        if (tween.Element.currentTile.x != x || tween.Element.currentTile.y != y) {
+            tween.Element.currentTile = MS.grid[x][y].Element;
+        }
     });
     this.tween.onComplete(function (tween) {
         if (tween.Element.status == 'alive') {
             MS.addLives(-1);
         }
-        //tween.Element.tween = null; // Is already gone in TWEEN
         tween.Element.remove();
     });
     this.tween.Element = this;
@@ -107,7 +123,7 @@ MS.Creep.prototype.calculatePath = function() {
 
 MS.Creep.prototype.update = function(time) {
 
-    if (!MS.Element.prototype.update.call(this. time) || this.nextTile == null) {
+    if (!MS.Element.prototype.update.call(this, time)) {
         return false;
     }
 
@@ -118,7 +134,10 @@ MS.Creep.prototype.update = function(time) {
  * @param damage
  * @returns {boolean} wether the creep is dead
  */
-MS.Creep.prototype.hit = function (damage) {
+MS.Creep.prototype.hit = function (damage, effect) {
+
+    effect = effect || false;
+    damage = damage || 1;
 
     this.hp -= damage;
     if (this.hp < 0 && this.status == 'alive') {
@@ -130,6 +149,21 @@ MS.Creep.prototype.hit = function (damage) {
         MS.addMoney(this.money);
         this.remove();
         return true;
+    }
+    if (effect != false) {
+        switch (effect) {
+            case 'slow':
+                if (this.isSlowed == false) {
+                    this.speed *= 1.5;
+                    this.object.tint = 0xbbd1ff;
+                    this.isSlowed = true;
+                    //this.calculatePath();
+                }
+            break;
+            case 'poison':
+                // @todo
+            break;
+        }
     }
     return false;
 

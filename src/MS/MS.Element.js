@@ -140,7 +140,7 @@ MS.Element.prototype = {
             MS._stage.removeChild(this.object);
         }
         if (this.tween != null) {
-            //TWEEN.remove(this.tween);
+            //this.tween.stop();
         }
         var indexOf = MS._objects.indexOf(this);
         if (indexOf >= 0) {

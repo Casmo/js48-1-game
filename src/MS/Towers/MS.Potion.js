@@ -47,6 +47,8 @@ MS.Potion = function () {
 
     this.duration = 750; // duration of bullet animation
 
+    this.effect = null;
+
 };
 
 MS.Potion.prototype = Object.create(MS.Element.prototype);

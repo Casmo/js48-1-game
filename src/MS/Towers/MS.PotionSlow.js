@@ -27,24 +27,24 @@
  * Each tile is part of a grid.
  * @constructor
  */
-MS.PotionPoison = function () {
+MS.PotionSlow = function () {
 
     MS.Potion.call(this);
 
     this.name = 'upgrade';
 
-    this.texture = 'potion-poison';
+    this.texture = 'potion-slow';
 
-    this.damage = 5;
+    this.damage = 3;
 
     this.price = 15;
 
-    this.speed = 100;
+    this.speed = 150;
 
-    this.duration = 950;
+    this.duration = 1150;
 
-    this.effect = 'poison';
+    this.effect = 'slow';
 
 };
 
-MS.PotionPoison.prototype = Object.create(MS.Potion.prototype);
+MS.PotionSlow.prototype = Object.create(MS.Potion.prototype);

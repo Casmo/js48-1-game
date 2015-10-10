@@ -126,6 +126,7 @@ MS.Tower.prototype.update = function(time) {
             bullet.texture = potion.texture;
             bullet.damage = potion.damage;
             bullet.duration = potion.duration;
+            bullet.effect = potion.effect;
             bullet.init();
             bullet.target = enemy;
             bullet.object.position = {

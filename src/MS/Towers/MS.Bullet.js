@@ -38,6 +38,8 @@ MS.Bullet = function () {
 
     this.tween = {};
 
+    this.effect = null;
+
 };
 
 MS.Bullet.prototype = Object.create(MS.Element.prototype);
@@ -70,7 +72,7 @@ MS.Bullet.prototype.fire = function(target) {
     this.tween.onComplete(function (tween) {
         tween.Element.tween = null; // Is already gone in TWEEN
         if (tween.Element.target != null) {
-            tween.Element.target.hit(tween.Element.damage);
+            tween.Element.target.hit(tween.Element.damage, tween.Element.effect);
         }
         var index = Math.floor(Math.random() * 3) + 1;
         MS._resources['impact-00' + index].data.play();

@@ -131,6 +131,10 @@ var MS = {
             src: 'towers/upgrade-potion-poison.png'
         },
         {
+            key: 'potion-slow',
+            src: 'towers/upgrade-potion-slow.png'
+        },
+        {
             key: 'tower-delete',
             src: 'towers/delete.png'
         },
@@ -187,10 +191,10 @@ var MS = {
             key: 'impact-003',
             src: 'sounds/effects/impact-003.wav'
         },
-        //{
-        //    key: 'sound-background',
-        //    src: 'sounds/Prop-Fluous.mp3'
-        //}
+        {
+            key: 'sound-background',
+            src: 'sounds/Prop-Fluous.mp3'
+        }
     ],
 
     init: function () {
@@ -245,9 +249,9 @@ var MS = {
             menu.innerHTML = '<img src="' + MS.settings.assetsPath + 'menu.png">';
             menu.setAttribute('onclick', "MS.showSplash();");
             document.body.appendChild(menu);
-            //MS._resources['sound-background'].data._volume = .5;
-            //MS._resources['sound-background'].data._loop = true;
-            //MS._resources['sound-background'].data.play();
+            MS._resources['sound-background'].data._volume = .5;
+            MS._resources['sound-background'].data._loop = true;
+            MS._resources['sound-background'].data.play();
             MS.startGame();
         });
         this._resizeGame();
@@ -561,6 +565,7 @@ var MS = {
         var index = wave - 1;
         var Creep = new MS.Creep();
         var CreepInfo = {};
+        var hp = 1;
         if (this._waveOptions[index] == null) {
             // Get a random one
             var random = Math.floor(Math.random() * this._waveOptions.length);
@@ -569,8 +574,9 @@ var MS = {
         else {
             // Setup the creep info
             CreepInfo = this._waveOptions[index];
+            hp = index;
         }
-        Creep.hp = CreepInfo.baseHp + Math.round(wave *.5);
+        Creep.hp = CreepInfo.baseHp + Math.round(hp *.5);
         Creep.texture = CreepInfo.texture;
         Creep.speed = CreepInfo.speed;
         Creep.money = wave;
@@ -765,6 +771,9 @@ var MS = {
                 Potion.selectable = true;
                 upgrades.push(Potion);
                 var Potion = new MS.PotionPoison();
+                Potion.selectable = true;
+                upgrades.push(Potion);
+                var Potion = new MS.PotionSlow();
                 Potion.selectable = true;
                 upgrades.push(Potion);
                 // @todo more here...

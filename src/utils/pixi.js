@@ -6106,7 +6106,8 @@ Resource._loadTypeMap = {
     'tga':      Resource.LOAD_TYPE.IMAGE,
     'wav':      Resource.LOAD_TYPE.AUDIO,
     'mp3':      Resource.LOAD_TYPE.AUDIO,
-    'ogg':      Resource.LOAD_TYPE.AUDIO
+    'ogg':      Resource.LOAD_TYPE.AUDIO,
+    'flac':     Resource.LOAD_TYPE.AUDIO
 };
 
 Resource._xhrTypeMap = {

@@ -373,7 +373,7 @@ TWEEN.Tween = function (object) {
         }
 
         if (_onUpdateCallback !== null) {
-            _onUpdateCallback.call(_object, value, this, _object);
+            _onUpdateCallback.call(_object, value, this);
         }
 
         if (elapsed === 1) {

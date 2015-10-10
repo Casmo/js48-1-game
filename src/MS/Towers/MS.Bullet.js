@@ -28,7 +28,7 @@ MS.Bullet = function () {
 
     this.name = 'bullet';
 
-    this.texture = 'tower-basic';
+    this.texture = 'potion-basic';
 
     this.damage = 1;
 
@@ -40,16 +40,6 @@ MS.Bullet = function () {
 
 MS.Bullet.prototype = Object.create(MS.Element.prototype);
 
-MS.Bullet.prototype.init = function() {
-
-    MS.Element.prototype.init.call(this);
-
-    this.object = new PIXI.Graphics();
-    this.object.beginFill(0xffffff);
-    this.object.drawCircle(0,0,5);
-
-};
-
 MS.Bullet.prototype.fire = function(target) {
 
     if (target != null) {
@@ -58,22 +48,30 @@ MS.Bullet.prototype.fire = function(target) {
 
     this.tween = new TWEEN.Tween(this.object.position);
     var to = {x:[],y:[]};
+    to.y.push(this.object.position.y - 50);
     to.x.push(this.target.object.position.x);
     to.y.push(this.target.object.position.y);
-    var duration = 250;
+    var duration = 750;
+    this.tween.propTo = to;
+    this.tween.interpolation(TWEEN.Interpolation.Bezier);
     this.tween.to(to, duration);
     this.tween.onUpdate(function(p, tween) {
-        // @todo update the tween.last to values based on tween.Element.target;
-        if (tween.Element.target != null) {
+        if (tween.Element.target != null && tween.Element.target.status == 'alive') {
+            tween.propTo.x[(tween.propTo.x.length -1)] = tween.Element.target.object.position.x;
+            tween.propTo.y[(tween.propTo.y.length -1)] = tween.Element.target.object.position.y;
+            tween.to(tween.propTo);
         }
         tween.Element.object.position.x = this.x;
         tween.Element.object.position.y = this.y;
+        tween.Element.object.rotation += .1;
     });
     this.tween.onComplete(function (tween) {
         tween.Element.tween = null; // Is already gone in TWEEN
         if (tween.Element.target != null) {
             tween.Element.target.hit(tween.Element.damage);
         }
+        var index = Math.floor(Math.random() * 4) + 1;
+        MS._resources['impact-00' + index].data.play();
         tween.Element.remove();
     });
     this.tween.Element = this;

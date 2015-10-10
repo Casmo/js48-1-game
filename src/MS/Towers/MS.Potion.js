@@ -35,7 +35,7 @@ MS.Potion = function () {
 
     this.texture = 'potion-basic';
 
-    this.speed = 2; // Speed of bullets
+    this.speed = 50; // Speed of bullets
 
     this.nextShot = 0;
 
@@ -65,8 +65,10 @@ MS.Potion.prototype.select = function() {
     MS.addMoney(-(this.price));
 
     // Build potion and add to the table
-    var Potion = this;
-    MS.Element.call(Potion);
+    var Potion = new MS.Potion(); // this;
+    for (var property in this) {
+        Potion[property] = this[property];
+    }
     Potion.init();
     Potion.object.position = {
         x: -18,

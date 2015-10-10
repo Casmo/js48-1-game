@@ -18,3 +18,5 @@ Open `build/index.html` in your browser.
 * [Secretlondon](http://commons.wikimedia.org/wiki/User:Secretlondon)
 * [Michel Baradari](http://apollo-music.de/)
 * [Ogrebane](http://opengameart.org/users/ogrebane)
+* [legoluft](http://www.legoluft.de/)
+* [Independent.nu](http://www.johannespinter.com/inu/ljudbank.htm)

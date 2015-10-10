@@ -42,6 +42,8 @@ MS.Creep = function () {
 
     this.money = 1;
 
+    this.fly = false;
+
     this.deadSound = null;
 
     this.currentTile = {};
@@ -65,7 +67,13 @@ MS.Creep.prototype.calculatePath = function() {
 
     var start = MS.graph.grid[this.currentTile.x][this.currentTile.y];
     var end = MS.graph.grid[this.endTile.x][this.endTile.y];
-    this.path = astar.search(MS.graph, start, end);
+    if (this.fly == true && 1==2) {
+        // @todo doesnt work, fuck
+        this.path = astar.search(MS.graphOpen, start, end);
+    }
+    else {
+        this.path = astar.search(MS.graph, start, end);
+    }
     if (this.path.length <= 0) {
         return false;
     }
@@ -105,6 +113,11 @@ MS.Creep.prototype.update = function(time) {
 
 };
 
+/**
+ *
+ * @param damage
+ * @returns {boolean} wether the creep is dead
+ */
 MS.Creep.prototype.hit = function (damage) {
 
     this.hp -= damage;
@@ -116,6 +129,8 @@ MS.Creep.prototype.hit = function (damage) {
         }
         MS.addMoney(this.money);
         this.remove();
+        return true;
     }
+    return false;
 
 };

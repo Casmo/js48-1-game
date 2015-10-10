@@ -39,7 +39,9 @@ var MS = {
     timer: 0,
     loadingBar: {},
     grid: [], // Complete grid with [x][y] = {open: true|false, Element: {}};
+    gridOpen: [], // Same all open
     graph: [], // Graph from grid used for a* calculations
+    graphOpen: [], // Same but all open (for flying creeps)
     selectedTile: null, // Current selected Tile
     score: 0,
     lives: 10,
@@ -171,6 +173,22 @@ var MS = {
         {
             key: 'sound-snake',
             src: 'sounds/effects/snake.wav'
+        },
+        {
+            key: 'impact-001',
+            src: 'sounds/effects/impact-001.wav'
+        },
+        {
+            key: 'impact-002',
+            src: 'sounds/effects/impact-002.wav'
+        },
+        {
+            key: 'impact-003',
+            src: 'sounds/effects/impact-003.wav'
+        },
+        {
+            key: 'impact-004',
+            src: 'sounds/effects/impact-004.wav'
         }
     ],
 
@@ -252,9 +270,10 @@ var MS = {
 
         for (var x = 0; x < gridSizeX; x++) {
             this.grid[x] = [];
-            this.graph[x] = [];
+            this.gridOpen[x] = [];
             for (var y = 0; y < gridSizeY; y++) {
                 var grid = {};
+                var gridOpen = {};
                 var Tile = new MS.Tile(x, y);
                 var open = true; // Default open
                 Tile.init();
@@ -263,9 +282,11 @@ var MS = {
                     y: halfGridSize + (y * gridSize)
                 };
                 Tile.add();
-                grid.open = Tile.open = this.graph[x][y] = open;
+                grid.open = gridOpen = Tile.open = open;
+                gridOpen.open = true;
                 grid.Element = Tile;
                 this.grid[x][y] = grid;
+                this.gridOpen[x][y] = gridOpen;
             }
         }
 
@@ -416,17 +437,20 @@ var MS = {
 
         returnGrid = returnGrid || false;
         var grid = [];
+        var gridOpen = [];
         for (var x = 0; x < this.gridSettings.sizeX; x++) {
             grid[x] = [];
+            gridOpen[x] = [];
             for (var y = 0; y < this.gridSettings.sizeY; y++) {
                 grid[x][y] = this.grid[x][y].open;
+                gridOpen[x][y] = true;
             }
         }
-
         if (returnGrid) {
             return grid;
         }
         this.graph = new Graph(grid);
+        this.graphOpen = new Graph(gridOpen, {diagonal: true});
 
     },
 
@@ -513,6 +537,7 @@ var MS = {
         Creep.speed = CreepInfo.speed;
         Creep.money = wave;
         Creep.deadSound = CreepInfo.sound;
+        Creep.fly = CreepInfo.fly || false;
         Creep.init();
         Creep.object.position = {
             x: startTile.object.position.x,

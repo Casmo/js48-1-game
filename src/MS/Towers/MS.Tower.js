@@ -123,6 +123,7 @@ MS.Tower.prototype.update = function(time) {
         var enemy = MS.findEnemyInRange(this.object.position, potion.range);
         if (enemy != false) {
             var bullet = new MS.Bullet();
+            bullet.texture = potion.texture;
             bullet.init();
             bullet.target = enemy;
             bullet.object.position = {

@@ -35,8 +35,6 @@ MS.PotionPoison = function () {
 
     this.texture = 'potion-poison';
 
-    this.speed = 5; // Speed of bullets
-
     this.price = 15;
 
 };

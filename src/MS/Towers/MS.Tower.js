@@ -96,6 +96,17 @@ MS.Tower.prototype.select = function() {
 
 };
 
+MS.Tower.prototype.remove = function() {
+
+    if (this.Tile != null) {
+        this.Tile.Tower = null;
+        MS.grid[this.Tile.x][this.Tile.y].open = 1;
+        MS.setGraph();
+    }
+    MS.Element.prototype.remove.call(this);
+
+};
+
 MS.Tower.prototype.update = function(time) {
 
     if (!MS.Element.prototype.update.call(this, time)) {

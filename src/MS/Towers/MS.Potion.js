@@ -89,6 +89,7 @@ MS.Potion.prototype.select = function() {
  * Update takes place in the tower/table object. This is for the menu...
  * @param time
  * @returns {boolean}
+ * @todo might animate this
  */
 MS.Potion.prototype.update = function(time) {
 

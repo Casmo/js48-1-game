@@ -83,6 +83,10 @@ var MS = {
         {
             key: 'potion-poison',
             src: 'towers/upgrade-potion-poison.png'
+        },
+        {
+            key: 'tower-delete',
+            src: 'towers/delete.png'
         }
     ],
 
@@ -414,17 +418,25 @@ var MS = {
         }
         else {
             // Show upgrades
-            if (Tile.Tower.potions.length >= Tile.Tower.potionSpots) {
-                return false; // Can't upgrade anymore...
-                // @todo show destroy button?
+            if (Tile.Tower.potions.length < Tile.Tower.potionSpots) {
+                var Potion = new MS.Potion();
+                Potion.selectable = true;
+                upgrades.push(Potion);
+                var Potion = new MS.PotionPoison();
+                Potion.selectable = true;
+                upgrades.push(Potion);
+                // @todo more here...
             }
-            var Potion = new MS.Potion();
-            Potion.selectable = true;
-            upgrades.push(Potion);
-            var Potion = new MS.PotionPoison();
-            Potion.selectable = true;
-            upgrades.push(Potion);
-            // @todo more here...
+            // Show delete
+            var deleteButton = new MS.Element;
+            deleteButton.texture = 'tower-delete';
+            deleteButton.selectable = true;
+            deleteButton.towerObject = Tile.Tower;
+            deleteButton.select = function() {
+                this.towerObject.remove();
+                MS.hideBuildMenu();
+            };
+            upgrades.push(deleteButton);
         }
 
         var x = (this.gridSettings.size / 2);

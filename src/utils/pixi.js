@@ -5697,7 +5697,7 @@ Resource.prototype._loadElement = function (type) {
                 src: this.url,
                 autoplay: false,
                 onload: this._boundComplete,
-                onloaderror: this._boundOnError
+                onloaderror: this._boundComplete
             }
         );
         this['isAudio'] = true;

@@ -130,6 +130,47 @@ var MS = {
         {
             key: 'tower-delete',
             src: 'towers/delete.png'
+        },
+        // sounds
+        {
+            key: 'sound-bunny',
+            src: 'sounds/effects/bunny.wav'
+        },
+        {
+            key: 'sound-elephant',
+            src: 'sounds/effects/elephant.wav'
+        },
+        {
+            key: 'sound-giraffe',
+            src: 'sounds/effects/giraffe.wav'
+        },
+        {
+            key: 'sound-hippo',
+            src: 'sounds/effects/hippo.wav'
+        },
+        {
+            key: 'sound-monkey',
+            src: 'sounds/effects/monkey.wav'
+        },
+        {
+            key: 'sound-panda',
+            src: 'sounds/effects/panda.ogg'
+        },
+        {
+            key: 'sound-parrot',
+            src: 'sounds/effects/parrot.wav'
+        },
+        {
+            key: 'sound-penguin',
+            src: 'sounds/effects/penguin.ogg'
+        },
+        {
+            key: 'sound-pig',
+            src: 'sounds/effects/pig.ogg'
+        },
+        {
+            key: 'sound-snake',
+            src: 'sounds/effects/snake.wav'
         }
     ],
 
@@ -392,47 +433,56 @@ var MS = {
     _waveOptions: [
         {
             texture: 'creep-bunny',
+            sound: 'sound-bunny',
             speed: 750,
             baseHp: 5
         },
         {
             texture: 'creep-penguin',
+            sound: 'sound-penguin',
             speed: 1000,
             baseHp: 6
         },
         {
             texture: 'creep-pig',
+            sound: 'sound-pig',
             speed: 1250,
             baseHp: 7
         },
         {
             texture: 'creep-snake',
+            sound: 'sound-snake',
             speed: 750,
             baseHp: 6
         },
         {
             texture: 'creep-monkey',
+            sound: 'sound-monkey',
             speed: 850,
             baseHp: 8
         },
         {
             texture: 'creep-panda',
+            sound: 'sound-panda',
             speed: 1250,
             baseHp: 10
         },
         {
             texture: 'creep-parrot',
+            sound: 'sound-parrot',
             speed: 750,
             baseHp: 5,
             fly: true // @todo
         },
         {
             texture: 'creep-elephant',
+            sound: 'sound-elephant',
             speed: 2000,
             baseHp: 15
         },
         {
             texture: 'creep-hippo',
+            sound: 'sound-hippo',
             speed: 1500,
             baseHp: 12
         }
@@ -462,6 +512,7 @@ var MS = {
         Creep.texture = CreepInfo.texture;
         Creep.speed = CreepInfo.speed;
         Creep.money = wave;
+        Creep.deadSound = CreepInfo.sound;
         Creep.init();
         Creep.object.position = {
             x: startTile.object.position.x,

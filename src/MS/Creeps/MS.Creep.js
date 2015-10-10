@@ -42,6 +42,8 @@ MS.Creep = function () {
 
     this.money = 1;
 
+    this.deadSound = null;
+
     this.currentTile = {};
     this.endTile = {};
     this.nextTile = {x:0,y:0};
@@ -109,6 +111,9 @@ MS.Creep.prototype.hit = function (damage) {
     if (this.hp < 0 && this.status == 'alive') {
         this.status = 'dead'; // since other objects might have the references
         // @todo effect here
+        if (this.deadSound != null) {
+            MS._resources[this.deadSound].data.play();
+        }
         MS.addMoney(this.money);
         this.remove();
     }

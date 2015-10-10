@@ -16,3 +16,5 @@ Open `build/index.html` in your browser.
 * [Kenney.nl](http://www.kenney.nl)
 * Unlucky Studio
 * [Secretlondon](http://commons.wikimedia.org/wiki/User:Secretlondon)
+* [Michel Baradari](http://apollo-music.de/)
+* [Ogrebane](http://opengameart.org/users/ogrebane)

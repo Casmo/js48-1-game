@@ -35,7 +35,13 @@ MS.PotionPoison = function () {
 
     this.texture = 'potion-poison';
 
+    this.damage = 5;
+
     this.price = 15;
+
+    this.speed = 100;
+
+    this.duration = 950;
 
 };
 

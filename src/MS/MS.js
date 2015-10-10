@@ -187,10 +187,10 @@ var MS = {
             key: 'impact-003',
             src: 'sounds/effects/impact-003.wav'
         },
-        {
-            key: 'sound-background',
-            src: 'sounds/Prop-Fluous.mp3'
-        }
+        //{
+        //    key: 'sound-background',
+        //    src: 'sounds/Prop-Fluous.mp3'
+        //}
     ],
 
     init: function () {
@@ -235,9 +235,19 @@ var MS = {
             splash.innerHTML += '<p><a class="play" onclick="MS.hideSplash();fullscreen();">PLAY!</a></p>';
             splash.setAttribute('onclick', "MS.hideSplash();fullscreen();");
             document.body.appendChild(splash);
-            MS._resources['sound-background'].data._volume = .5;
-            MS._resources['sound-background'].data._loop = true;
-            MS._resources['sound-background'].data.play();
+
+            var menu = document.createElement('div');
+            menu.id = 'menu';
+            menu.style.position = 'fixed';
+            menu.style.zIndex = 99;
+            menu.style.bottom = 0;
+            menu.style.left = 0;
+            menu.innerHTML = '<img src="' + MS.settings.assetsPath + 'menu.png">';
+            menu.setAttribute('onclick', "MS.showSplash();");
+            document.body.appendChild(menu);
+            //MS._resources['sound-background'].data._volume = .5;
+            //MS._resources['sound-background'].data._loop = true;
+            //MS._resources['sound-background'].data.play();
             MS.startGame();
         });
         this._resizeGame();
@@ -246,6 +256,11 @@ var MS = {
     hideSplash: function() {
         document.getElementById('splash').style.display = 'none';
         this.pause = false;
+    },
+
+    showSplash: function() {
+        document.getElementById('splash').style.display = 'block';
+        this.pause = true;
     },
 
     /**
@@ -766,7 +781,7 @@ var MS = {
             upgrades.push(deleteButton);
         }
 
-        var x = (this.gridSettings.size / 2);
+        var x = (this.gridSettings.size / 2) + 64; // First 64 will be menu.
         var y = (this.gridSettings.size / 2) + this.gridSettings.sizeY * this.gridSettings.size;
         for (var i = 0; i < upgrades.length; i++) {
             var upgrade = upgrades[i];

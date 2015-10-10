@@ -32,6 +32,8 @@ MS.Bullet = function () {
 
     this.damage = 1;
 
+    this.duration = 750;
+
     this.target = null; // The enemy to shoot at
 
     this.tween = {};
@@ -48,10 +50,10 @@ MS.Bullet.prototype.fire = function(target) {
 
     this.tween = new TWEEN.Tween(this.object.position);
     var to = {x:[],y:[]};
-    to.y.push(this.object.position.y - 50);
+    to.y.push(this.object.position.y - 75);
     to.x.push(this.target.object.position.x);
     to.y.push(this.target.object.position.y);
-    var duration = 750;
+    var duration = this.duration;
     this.tween.propTo = to;
     this.tween.interpolation(TWEEN.Interpolation.Bezier);
     this.tween.to(to, duration);

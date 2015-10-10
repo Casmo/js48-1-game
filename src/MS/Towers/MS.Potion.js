@@ -45,6 +45,8 @@ MS.Potion = function () {
 
     this.range = 128;
 
+    this.duration = 750; // duration of bullet animation
+
 };
 
 MS.Potion.prototype = Object.create(MS.Element.prototype);
@@ -69,6 +71,7 @@ MS.Potion.prototype.select = function() {
     for (var property in this) {
         Potion[property] = this[property];
     }
+    Potion.selectable = false;
     Potion.init();
     Potion.object.position = {
         x: -18,
@@ -78,7 +81,7 @@ MS.Potion.prototype.select = function() {
         Potion.object.position.x = 18;
     }
     MS.selectedTile.Tower.object.addChild(Potion.object);
-    MS.selectedTile.Tower.potions.push(this);
+    MS.selectedTile.Tower.potions.push(Potion);
 
     MS.hideBuildMenu();
     return true;

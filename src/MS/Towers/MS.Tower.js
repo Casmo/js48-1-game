@@ -124,11 +124,13 @@ MS.Tower.prototype.update = function(time) {
         if (enemy != false) {
             var bullet = new MS.Bullet();
             bullet.texture = potion.texture;
+            bullet.damage = potion.damage;
+            bullet.duration = potion.duration;
             bullet.init();
             bullet.target = enemy;
             bullet.object.position = {
-                x: this.Tile.object.position.x,
-                y: this.Tile.object.position.y
+                x: this.Tile.object.position.x + potion.object.position.x,
+                y: this.Tile.object.position.y + potion.object.position.y
             };
             bullet.add();
             bullet.fire();

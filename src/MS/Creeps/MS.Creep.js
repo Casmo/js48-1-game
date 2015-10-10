@@ -38,6 +38,10 @@ MS.Creep = function () {
 
     this.hp = 10;
 
+    this.status = 'alive'; // || dead
+
+    this.money = 1;
+
     this.currentTile = {};
     this.endTile = {};
     this.nextTile = {x:0,y:0};
@@ -81,6 +85,7 @@ MS.Creep.prototype.calculatePath = function() {
         tween.Element.object.position.y = this.y;
     });
     this.tween.onComplete(function (tween) {
+        MS.addLives(-1);
         tween.Element.tween = null; // Is already gone in TWEEN
         tween.Element.remove();
     });
@@ -99,8 +104,10 @@ MS.Creep.prototype.update = function(time) {
 MS.Creep.prototype.hit = function (damage) {
 
     this.hp -= damage;
-    if (this.hp < 0) {
+    if (this.hp < 0 && this.status == 'alive') {
+        this.status = 'dead'; // since other objects might have the references
         // @todo effect here
+        MS.addMoney(this.money);
         this.remove();
     }
 

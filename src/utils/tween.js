@@ -112,6 +112,9 @@ TWEEN.Tween = function (object) {
     var _onUpdateCallback = null;
     var _onCompleteCallback = null;
     var _onStopCallback = null;
+    var _paused = false;
+    var _pauseStart = null;
+
 
     // Set all starting values present on the target object
     for (var field in object) {

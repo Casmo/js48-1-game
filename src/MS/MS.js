@@ -41,6 +41,9 @@ var MS = {
     grid: [], // Complete grid with [x][y] = {open: true|false, Element: {}};
     graph: [], // Graph from grid used for a* calculations
     selectedTile: null, // Current selected Tile
+    score: 0,
+    lives: 10,
+    money: 100,
     gridSettings: {
         sizeX: 15,
         sizeY: 9,
@@ -151,6 +154,7 @@ var MS = {
      */
     startGame: function () {
 
+        this.reset();
         var gridSizeX = this.gridSettings.sizeX;
         var gridSizeY = this.gridSettings.sizeY;
         var gridSize = this.gridSettings.size;
@@ -181,8 +185,78 @@ var MS = {
         this.grid[start.x][start.y].Element.selectable = false;
         this.grid[end.x][end.y].Element.object.tint = 0xff0000;
         this.grid[end.x][end.y].Element.selectable = false;
-
         this.setGraph();
+
+        // Set money and lives
+        var money = new MS.Element();
+        money.money = 0;
+        money.init();
+        money.object = new PIXI.Text(
+            this.money,
+            {
+                font: 'bold 24px Arial',
+                fill: '#007700',
+                align: 'right',
+                stroke: '#FFFFFF',
+                strokeThickness: 3
+            }
+        );
+        money.object.position = {
+            x: MS.settings.width,
+            y: MS.settings.height
+        };
+        money.object.anchor.x = 1;
+        money.object.anchor.y = 1;
+        money.update = function(time) {
+            if (this.money < MS.money) {
+                this.money++;
+            }
+            else if (this.money > MS.money) {
+                this.money--;
+            }
+            else {
+                return;
+            }
+            this.object.text = '$ ' + this.money +',-';
+        };
+        money.add();
+
+        var life = new MS.Element();
+        life.lives = 0;
+        life.init();
+        life.object = new PIXI.Text(
+            this.lives,
+            {
+                font: 'bold 24px Arial',
+                fill: '#779900',
+                align: 'right',
+                stroke: '#FFFFFF',
+                strokeThickness: 3
+            }
+        );
+        life.object.position = {
+            x: MS.settings.width,
+            y: (MS.settings.height-32)
+        };
+        life.object.anchor.x = 1;
+        life.object.anchor.y = 1;
+        life.update = function(time) {
+            if (this.lives < MS.lives) {
+                this.lives++;
+            }
+            else if (this.lives > MS.lives) {
+                this.lives--;
+            }
+            else {
+                return;
+            }
+            var label = 'lives';
+            if (this.lives == 1) {
+                label = 'life';
+            }
+            this.object.text = this.lives +' ' + label;
+        };
+        life.add();
 
     },
 
@@ -291,6 +365,30 @@ var MS = {
         for (var i = 0; i < this._objects.length; i++) {
             this._objects[i].remove();
         }
+        this.lives = 10;
+        this.score = 0;
+        this.money = 100;
+        this.addMoney(0);
+        this.addScore(0);
+        this.addLives(0);
+    },
+
+    addMoney: function(money) {
+
+        this.money += money;
+
+    },
+
+    addScore: function (score) {
+
+        this.score += score;
+
+    },
+
+    addLives: function (lives) {
+
+        this.lives += lives;
+
     },
 
     _updateLayers: function () {

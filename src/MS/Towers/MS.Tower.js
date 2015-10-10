@@ -59,7 +59,11 @@ MS.Tower.prototype.select = function() {
         return false;
     }
 
-    // @todo check money
+    if (this.price > MS.money) {
+        MS.hideBuildMenu();
+        return false;
+    }
+    MS.addMoney(-(this.price));
     // if above checks are true then...
     var grid = MS.setGraph(true);
     grid[MS.selectedTile.x][MS.selectedTile.y] = 0;

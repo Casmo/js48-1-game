@@ -59,9 +59,12 @@ MS.Potion.prototype.select = function() {
     }
 
     // @todo check money
-    // @todo check if we do not close the a* path...
 
-    // if above checks are true then...
+    if (this.price > MS.money) {
+        MS.hideBuildMenu();
+        return false;
+    }
+    MS.addMoney(-(this.price));
 
     // Build potion and add to the table
     var Potion = this;

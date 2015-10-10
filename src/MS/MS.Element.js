@@ -57,6 +57,8 @@ MS.Element = function () {
 
     this.selectable = false;
 
+    this.tween = null;
+
 };
 
 MS.Element.prototype = {
@@ -136,6 +138,9 @@ MS.Element.prototype = {
     remove: function () {
         if (this.object != null) {
             MS._stage.removeChild(this.object);
+        }
+        if (this.tween != null) {
+            //TWEEN.remove(this.tween);
         }
         var indexOf = MS._objects.indexOf(this);
         if (indexOf >= 0) {

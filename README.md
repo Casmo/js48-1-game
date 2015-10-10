@@ -15,3 +15,4 @@ Open `build/index.html` in your browser.
 * [Couchfriends.com](http://www.couchfriends.com)
 * [Kenney.nl](http://www.kenney.nl)
 * Unlucky Studio
+* [Secretlondon](http://commons.wikimedia.org/wiki/User:Secretlondon)

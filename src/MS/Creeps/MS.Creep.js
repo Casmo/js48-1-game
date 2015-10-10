@@ -85,8 +85,10 @@ MS.Creep.prototype.calculatePath = function() {
         tween.Element.object.position.y = this.y;
     });
     this.tween.onComplete(function (tween) {
-        MS.addLives(-1);
-        tween.Element.tween = null; // Is already gone in TWEEN
+        if (tween.Element.status == 'alive') {
+            MS.addLives(-1);
+        }
+        //tween.Element.tween = null; // Is already gone in TWEEN
         tween.Element.remove();
     });
     this.tween.Element = this;

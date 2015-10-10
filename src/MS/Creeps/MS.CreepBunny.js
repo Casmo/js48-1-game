@@ -32,8 +32,6 @@ MS.CreepBunny = function () {
 
     this.texture = 'creep-bunny';
 
-    this.hp = 1;
-
 };
 
 MS.CreepBunny.prototype = Object.create(MS.Creep.prototype);

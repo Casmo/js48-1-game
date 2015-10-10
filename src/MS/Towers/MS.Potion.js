@@ -58,8 +58,6 @@ MS.Potion.prototype.select = function() {
         return false;
     }
 
-    // @todo check money
-
     if (this.price > MS.money) {
         MS.hideBuildMenu();
         return false;

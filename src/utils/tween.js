@@ -64,6 +64,36 @@ var TWEEN = TWEEN || (function () {
 
             },
 
+            /**
+             * Pause all tweens
+             */
+            pause: function() {
+
+                var i = 0;
+
+                while (i < _tweens.length) {
+
+                    _tweens[i].pause();
+
+                }
+
+            },
+
+            /**
+             * Play all tweens
+             */
+            play: function() {
+
+                var i = 0;
+
+                while (i < _tweens.length) {
+
+                    _tweens[i].play();
+
+                }
+
+            },
+
             update: function (time) {
 
                 if (_tweens.length === 0) {
@@ -131,6 +161,29 @@ TWEEN.Tween = function (object) {
 
         return this;
 
+    };
+
+    this.pause = function () {
+        if(_paused)
+            return;
+
+        _paused = true;
+        _pauseStart = new Date().getTime();
+
+        TWEEN.remove( this );
+    };
+
+    this.play = function () {
+        if(!_paused)
+            return;
+
+        _paused = false;
+
+        var now = new Date().getTime();
+
+        _startTime += now - _pauseStart;
+
+        TWEEN.add( this );
     };
 
     this.start = function (time) {

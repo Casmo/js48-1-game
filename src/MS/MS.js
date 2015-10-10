@@ -44,6 +44,13 @@ var MS = {
     score: 0,
     lives: 10,
     money: 100,
+    pause: false,
+    waveSettings: {
+        currentWave: 1,
+        waveCreeps: 10,
+        waveInterval: 250,
+        nextSpawn: 1000
+    },
     gridSettings: {
         sizeX: 15,
         sizeY: 9,
@@ -71,6 +78,42 @@ var MS = {
         {
             key: 'creep-bunny',
             src: 'creeps/bunny.png'
+        },
+        {
+            key: 'creep-elephant',
+            src: 'creeps/elephant.png'
+        },
+        {
+            key: 'creep-giraffe',
+            src: 'creeps/giraffe.png'
+        },
+        {
+            key: 'creep-hippo',
+            src: 'creeps/hippo.png'
+        },
+        {
+            key: 'creep-monkey',
+            src: 'creeps/monkey.png'
+        },
+        {
+            key: 'creep-panda',
+            src: 'creeps/panda.png'
+        },
+        {
+            key: 'creep-parrot',
+            src: 'creeps/parrot.png'
+        },
+        {
+            key: 'creep-penguin',
+            src: 'creeps/penguin.png'
+        },
+        {
+            key: 'creep-pig',
+            src: 'creeps/pig.png'
+        },
+        {
+            key: 'creep-snake',
+            src: 'creeps/snake.png'
         },
         {
             key: 'tower-basic',
@@ -211,7 +254,7 @@ var MS = {
         };
         money.object.anchor.x = 1;
         money.object.anchor.y = 1;
-        money.update = function(time) {
+        money.update = function (time) {
             if (this.money < MS.money) {
                 this.money++;
             }
@@ -221,7 +264,7 @@ var MS = {
             else {
                 return;
             }
-            this.object.text = '$ ' + this.money +',-';
+            this.object.text = '$ ' + this.money + ',-';
         };
         money.add();
 
@@ -240,11 +283,11 @@ var MS = {
         );
         life.object.position = {
             x: MS.settings.width,
-            y: (MS.settings.height-32)
+            y: (MS.settings.height - 32)
         };
         life.object.anchor.x = 1;
         life.object.anchor.y = 1;
-        life.update = function(time) {
+        life.update = function (time) {
             if (this.lives < MS.lives) {
                 this.lives++;
             }
@@ -258,9 +301,68 @@ var MS = {
             if (this.lives == 1) {
                 label = 'life';
             }
-            this.object.text = this.lives +' ' + label;
+            this.object.text = this.lives + ' ' + label;
         };
         life.add();
+
+        var waveCounter = new MS.Element();
+        waveCounter.wave = 1;
+        waveCounter.init();
+        waveCounter.object = new PIXI.Text(
+            'wave: ' + this.waveSettings.currentWave,
+            {
+                font: 'bold 24px Arial',
+                fill: '#779900',
+                align: 'right',
+                stroke: '#FFFFFF',
+                strokeThickness: 3
+            }
+        );
+        waveCounter.object.position = {
+            x: MS.settings.width - 256,
+            y: (MS.settings.height - 32)
+        };
+        waveCounter.object.anchor.x = 1;
+        waveCounter.object.anchor.y = 1;
+        waveCounter.update = function (time) {
+            if (this.wave < MS.waveSettings.currentWave) {
+                this.wave++;
+            }
+            else if (this.wave > MS.waveSettings.currentWave) {
+                this.wave--;
+            }
+            else {
+                return;
+            }
+            var label = 'wave';
+            this.object.text = label +': ' + this.wave;
+        };
+        waveCounter.add();
+
+        var nextSpawn = new MS.Element();
+        nextSpawn.timer = 0;
+        nextSpawn.init();
+        nextSpawn.object = new PIXI.Text(
+            'Next: ' + this.waveSettings.nextSpawn,
+            {
+                font: 'bold 24px Arial',
+                fill: '#007700',
+                align: 'right',
+                stroke: '#FFFFFF',
+                strokeThickness: 3
+            }
+        );
+        nextSpawn.object.position = {
+            x: MS.settings.width - 256,
+            y: MS.settings.height
+        };
+        nextSpawn.object.anchor.x = 1;
+        nextSpawn.object.anchor.y = 1;
+        nextSpawn.update = function (time) {
+            this.timer = MS.waveSettings.nextSpawn - MS.timer;
+            this.object.text = 'Next: ' + this.timer;
+        };
+        nextSpawn.add();
 
     },
 
@@ -269,7 +371,7 @@ var MS = {
      * @link https://github.com/bgrins/javascript-astar
      * @param returnGraph boolean wether to return the grid or set it as final
      */
-    setGraph: function(returnGrid) {
+    setGraph: function (returnGrid) {
 
         returnGrid = returnGrid || false;
         var grid = [];
@@ -287,14 +389,79 @@ var MS = {
 
     },
 
+    _waveOptions: [
+        {
+            texture: 'creep-bunny',
+            speed: 750,
+            baseHp: 5
+        },
+        {
+            texture: 'creep-penguin',
+            speed: 1000,
+            baseHp: 6
+        },
+        {
+            texture: 'creep-pig',
+            speed: 1250,
+            baseHp: 7
+        },
+        {
+            texture: 'creep-snake',
+            speed: 750,
+            baseHp: 6
+        },
+        {
+            texture: 'creep-monkey',
+            speed: 850,
+            baseHp: 8
+        },
+        {
+            texture: 'creep-panda',
+            speed: 1250,
+            baseHp: 10
+        },
+        {
+            texture: 'creep-parrot',
+            speed: 750,
+            baseHp: 5,
+            fly: true // @todo
+        },
+        {
+            texture: 'creep-elephant',
+            speed: 2000,
+            baseHp: 15
+        },
+        {
+            texture: 'creep-hippo',
+            speed: 1500,
+            baseHp: 12
+        }
+    ],
     /**
-     * Temporary function to spawn creeps
+     * Temporary function to spawn creeps.
+     *
+     * Not so temporary anymore... Since time is running out.
      */
-    spawnCreep: function () {
+    spawnCreep: function (wave) {
 
         var startTile = this.grid[this.gridSettings.start.x][this.gridSettings.start.y].Element;
         var endTile = this.grid[this.gridSettings.end.x][this.gridSettings.end.y].Element;
-        var Creep = new MS.CreepBunny();
+        var index = wave - 1;
+        var Creep = new MS.Creep();
+        var CreepInfo = {};
+        if (this._waveOptions[index] == null) {
+            // Get a random one
+            var random = Math.floor(Math.random() * this._waveOptions.length);
+            CreepInfo = this._waveOptions[random];
+        }
+        else {
+            // Setup the creep info
+            CreepInfo = this._waveOptions[index];
+        }
+        Creep.hp = CreepInfo.baseHp + (wave * 2);
+        Creep.texture = CreepInfo.texture;
+        Creep.speed = CreepInfo.speed;
+        Creep.money = wave;
         Creep.init();
         Creep.object.position = {
             x: startTile.object.position.x,
@@ -354,12 +521,58 @@ var MS = {
     },
 
     update: function (time) {
-        this.timer++;
-        for (var i = 0; i < this._objects.length; i++) {
-            this._objects[i].update(time);
-        }
         this._renderer.render(this._stage);
-        TWEEN.update(time);
+        if (this.pause == false) {
+            this.timer++;
+            for (var i = 0; i < this._objects.length; i++) {
+                this._objects[i].update(time);
+            }
+            TWEEN.update(time);
+
+            if (this.timer > this.waveSettings.nextSpawn) {
+                // Spawn creep
+                this.spawnCreep(this.waveSettings.currentWave);
+                this.waveSettings.waveCreeps--;
+                this.waveSettings.nextSpawn += this.waveSettings.waveInterval;
+                if (this.waveSettings.waveCreeps < 0) {
+                    // Next wave
+                    this.setNextWave();
+                }
+            }
+
+        }
+    },
+
+    setNextWave: function() {
+
+        this.waveSettings.currentWave++;
+        this.waveSettings.nextSpawn += 500;
+        this.waveSettings.waveCreeps = 10 + Math.round(this.waveSettings.currentWave * 1.75);
+        this.waveSettings.waveInterval = Math.round(250 * (1 / this.waveSettings.currentWave));
+        if (this.waveSettings.waveInterval < 50) {
+            this.waveSettings.waveInterval = 50;
+        }
+
+    },
+
+    /**
+     * Pause or continue the game
+     * @param pause
+     */
+    togglePause: function () {
+
+        var pause = true;
+        if (this.pause == true) {
+            pause = false;
+        }
+        if (pause == false) {
+            TWEEN.play();
+        }
+        else {
+            TWEEN.pause();
+        }
+        this.pause = pause;
+
     },
 
     /**
@@ -369,15 +582,23 @@ var MS = {
         for (var i = 0; i < this._objects.length; i++) {
             this._objects[i].remove();
         }
+        this.timer = 0;
         this.lives = 10;
         this.score = 0;
         this.money = 100;
         this.addMoney(0);
         this.addScore(0);
         this.addLives(0);
+
+        this.waveSettings = {
+            currentWave: 1,
+            waveCreeps: 10,
+            waveInterval: 250,
+            nextSpawn: 1000
+        };
     },
 
-    addMoney: function(money) {
+    addMoney: function (money) {
 
         this.money += money;
 
@@ -432,7 +653,7 @@ var MS = {
             deleteButton.texture = 'tower-delete';
             deleteButton.selectable = true;
             deleteButton.towerObject = Tile.Tower;
-            deleteButton.select = function() {
+            deleteButton.select = function () {
                 this.towerObject.remove();
                 MS.hideBuildMenu();
             };

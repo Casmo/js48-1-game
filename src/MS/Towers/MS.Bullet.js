@@ -63,7 +63,6 @@ MS.Bullet.prototype.fire = function(target) {
     var duration = 250;
     this.tween.to(to, duration);
     this.tween.onUpdate(function(p, tween) {
-        //console.log(tween);
         // @todo update the tween.last to values based on tween.Element.target;
         if (tween.Element.target != null) {
         }
@@ -72,10 +71,10 @@ MS.Bullet.prototype.fire = function(target) {
     });
     this.tween.onComplete(function (tween) {
         tween.Element.tween = null; // Is already gone in TWEEN
-        tween.Element.remove();
         if (tween.Element.target != null) {
             tween.Element.target.hit(tween.Element.damage);
         }
+        tween.Element.remove();
     });
     this.tween.Element = this;
     this.tween.start();

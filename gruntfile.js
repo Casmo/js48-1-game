@@ -24,6 +24,7 @@ module.exports = function(grunt) {
                     'src/MS/Towers/MS.PotionPoison.js',
                     'src/MS/Towers/MS.PotionSlow.js',
                     'src/MS/Towers/MS.Bullet.js',
+                    'src/MS/Utils/MS.Coin.js',
                     'src/game.js'
                 ],
                 dest: 'build/game.js'

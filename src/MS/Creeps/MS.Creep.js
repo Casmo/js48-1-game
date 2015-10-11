@@ -146,7 +146,14 @@ MS.Creep.prototype.hit = function (damage, effect) {
         if (this.deadSound != null) {
             MS._resources[this.deadSound].data.play();
         }
-        MS.addMoney(this.money);
+        //MS.addMoney(this.money);
+        var pos = {
+            x: this.object.position.x,
+            y: this.object.position.y
+        };
+        for (var i = 0; i <= this.money; i++) {
+            MS.addCoin(pos);
+        }
         this.remove();
         return true;
     }

@@ -1,5 +1,5 @@
 # js48-1-game (MS - Mad Science)
-Entry for the js48-1 (http://itch.io/jam/js48-1) game jam.
+Entry for the js48-1 (http://itch.io/jam/js48-1) game jam. Thanks to [BoosterMedia](http://www.boostermedia.com/) for hosting!
 
 # Install
 `npm install`
@@ -21,3 +21,4 @@ Open `build/index.html` in your browser.
 * [legoluft](http://www.legoluft.de/)
 * [Independent.nu](http://www.johannespinter.com/inu/ljudbank.htm)
 * Prop
+* [morgan3d](http://opengameart.org/users/morgan3d)

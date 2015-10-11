@@ -138,6 +138,42 @@ var MS = {
             key: 'tower-delete',
             src: 'towers/delete.png'
         },
+        {
+            key: 'coin-001',
+            src: 'utils/coin-001.png'
+        },
+        {
+            key: 'coin-002',
+            src: 'utils/coin-002.png'
+        },
+        {
+            key: 'coin-003',
+            src: 'utils/coin-003.png'
+        },
+        {
+            key: 'coin-004',
+            src: 'utils/coin-004.png'
+        },
+        {
+            key: 'coin-005',
+            src: 'utils/coin-005.png'
+        },
+        {
+            key: 'coin-006',
+            src: 'utils/coin-006.png'
+        },
+        {
+            key: 'coin-007',
+            src: 'utils/coin-007.png'
+        },
+        {
+            key: 'coin-008',
+            src: 'utils/coin-008.png'
+        },
+        {
+            key: 'coin-009',
+            src: 'utils/coin-009.png'
+        },
         // sounds
         {
             key: 'sound-bunny',
@@ -194,6 +230,10 @@ var MS = {
         {
             key: 'sound-background',
             src: 'sounds/Prop-Fluous.mp3'
+        },
+        {
+            key: 'sound-coin',
+            src: 'sounds/effects/coin.wav'
         }
     ],
 
@@ -470,6 +510,19 @@ var MS = {
 
     },
 
+    addCoin: function(pos) {
+
+        var Coin = new MS.Coin();
+        Coin.init();
+        Coin.object.position = {
+            x: pos.x,
+            y: pos.y
+        };
+        Coin.add();
+        Coin.animate();
+
+    },
+
     /**
      * Set graph after building a new tower. See A* documentation
      * @link https://github.com/bgrins/javascript-astar
@@ -565,21 +618,22 @@ var MS = {
         var index = wave - 1;
         var Creep = new MS.Creep();
         var CreepInfo = {};
-        var hp = 1;
+        var hp = Math.round(wave * 1.3);
         if (this._waveOptions[index] == null) {
             // Get a random one
             var random = Math.floor(Math.random() * this._waveOptions.length);
             CreepInfo = this._waveOptions[random];
+            var money = random;
         }
         else {
             // Setup the creep info
             CreepInfo = this._waveOptions[index];
-            hp = index;
+            var money = index;
         }
-        Creep.hp = CreepInfo.baseHp + Math.round(hp *.5);
+        Creep.hp = CreepInfo.baseHp + hp;
         Creep.texture = CreepInfo.texture;
         Creep.speed = CreepInfo.speed;
-        Creep.money = wave;
+        Creep.money = money;
         Creep.deadSound = CreepInfo.sound;
         Creep.fly = CreepInfo.fly || false;
         Creep.init();

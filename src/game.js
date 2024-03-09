@@ -35,6 +35,7 @@ function update(time) {
     requestAnimationFrame(update);
 }
 function fullscreen() {
+    return;
     var element = document.documentElement;
     if(element.requestFullscreen) {
         element.requestFullscreen();
